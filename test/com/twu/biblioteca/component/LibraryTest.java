@@ -1,5 +1,7 @@
 package com.twu.biblioteca.component;
 
+import com.twu.biblioteca.exceptions.BookAlreadyExistError;
+import com.twu.biblioteca.exceptions.BookNotExistError;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -45,5 +47,25 @@ public class LibraryTest {
     @Test(expected = BookAlreadyExistError.class)
     public void testAddExistingBookMethod() throws BookAlreadyExistError {
         library.addBook(new Book("E book", "E person", 2006));
+    }
+
+    @Test
+    public void testCheckoutBookMethod() {
+        library.checkout(books[0]); // Checkout the very first item from the book list
+        Assert.assertEquals(library.getBookCount(), 5);
+        Assert.assertEquals(library.getAvailableBookCount(), 4);
+        Assert.assertEquals(library.getAvailableBooks().size(), 4);
+
+        library.checkout(new Book("E book", "E person", 2006));
+        Assert.assertEquals(library.getBookCount(), 5);
+        Assert.assertEquals(library.getAvailableBookCount(), 3);
+        Assert.assertEquals(library.getAvailableBooks().size(), 3);
+
+        library.checkout("C book", "C person", 1979);
+    }
+
+    @Test(expected = BookNotExistError.class )
+    public void testCheckoutInvalidBookMethod() {
+        library.checkout(new Book("H book", "H person", 2010));
     }
 }

@@ -19,7 +19,7 @@ public class InputHandlerTest {
     }
 
     @Test
-    public void testComposeOptions() {
+    public void testComposeOptionsMethod() {
         Assert.assertEquals(
                 InputHandler.composeOptionString(true, "Option A", "Option B")
                 , String.join("\n", "[1] Option A", "[2] Option B") + "\n"
@@ -32,7 +32,7 @@ public class InputHandlerTest {
     }
 
     @Test
-    public void testPrintFallbackOption() {
+    public void testPrintFallbackOptionMethod() {
         InputHandler.printFallbackOption();
         Assert.assertEquals("\n(Type " + InputHandler.EXIT_FLAG + " to exit the program, or " + InputHandler.RETURN_FLAG + " to return to previous section)\n", outputStream.toString());
     }

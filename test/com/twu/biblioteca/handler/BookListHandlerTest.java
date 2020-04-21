@@ -1,7 +1,7 @@
 package com.twu.biblioteca.handler;
 
 import com.twu.biblioteca.component.Book;
-import com.twu.biblioteca.component.BookAlreadyExistError;
+import com.twu.biblioteca.exceptions.BookAlreadyExistError;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -26,7 +26,7 @@ public class BookListHandlerTest {
     }
 
     @Test
-    public void testRetrieveOptions() throws BookAlreadyExistError {
+    public void testRetrieveOptionsMethod() throws BookAlreadyExistError {
         String[] options = bookListHandler.retrieveOptions();
         Assert.assertEquals(5, options.length);
         for (int index = 0; index <= 100; index++) {
