@@ -1,14 +1,17 @@
 package com.twu.biblioteca.handler;
 
-public class WelcomeHandler extends InputHandler {
+import com.twu.biblioteca.component.Library;
+
+public class BookListHandler extends InputHandler {
+
+    protected static final Library library = new Library("Test library");
 
     /**
      * Print heading message
      */
     @Override
     protected void printHeading() {
-        System.out.println("Welcome to Biblioteca. Your one-stop-shop for great book titles in Bangalore!");
-        System.out.println("Enter a digit corresponding with the option that you want to proceed with.");
+
     }
 
     /**
@@ -19,6 +22,6 @@ public class WelcomeHandler extends InputHandler {
      */
     @Override
     protected String[] retrieveOptions(String... input) {
-        return new String[] {"List of books"};
+        return new String[0];
     }
 }

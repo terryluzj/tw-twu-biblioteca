@@ -12,7 +12,16 @@ public abstract class InputHandler {
 
     protected static final Scanner scanner = new Scanner(System.in);
 
+    /**
+     * Print heading message
+     */
     protected abstract void printHeading();
+
+    /**
+     * Retrieve options given optional user input
+     * @param input User input
+     * @return Array of options in string form
+     */
     protected abstract String[] retrieveOptions(String... input);
 
     private InputHandler delegateHandler;

@@ -22,6 +22,8 @@ public class WelcomeHandlerTest extends InputHandlerTest {
     @Test
     public void testPrintWelcomeMessage() {
         welcomeHandler.printHeading();
-        Assert.assertEquals("Welcome to Biblioteca. Your one-stop-shop for great book titles in Bangalore!\n", outputStream.toString());
+        Assert.assertEquals("Welcome to Biblioteca. Your one-stop-shop for great book titles in Bangalore!\n"
+                + "Enter a digit corresponding with the option that you want to proceed with.\n",
+                outputStream.toString());
     }
 }
