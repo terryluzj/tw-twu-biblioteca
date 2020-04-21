@@ -10,8 +10,8 @@ public class BookTest {
     @Test
     public void testProperty() {
         Assert.assertEquals(
-                book.getDescription().toString()
-                , new BookDescription("Test book", "Terry", 2020).toString()
+                book.getDescription().toString(),
+                new BookDescription("Test book", "Terry", 2020).toString()
         );
         Assert.assertEquals(book.getName(), "Test book");
         Assert.assertEquals(book.getAuthor(), "Terry");

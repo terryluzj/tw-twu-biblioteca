@@ -7,14 +7,19 @@ import org.junit.Test;
 public class LibraryTest {
 
     private static final Library library = new Library("biblioteca");
+    private static final Book[] books = new Book[] {
+            new Book("A book", "A person", 1986),
+            new Book("B book", "B person", 1992),
+            new Book("C book", "C person", 1979),
+            new Book("D book", "D person", 2012),
+            new Book("E book", "E person", 2006),
+    };
 
     @BeforeClass
-    public static void addBookToLibrary() {
-        library.addBook(new Book("A book", "A person", 1986));
-        library.addBook(new Book("B book", "B person", 1992));
-        library.addBook(new Book("C book", "C person", 1979));
-        library.addBook(new Book("D book", "D person", 2012));
-        library.addBook(new Book("E book", "E person", 2006));
+    public static void addBookToLibrary() throws BookAlreadyExistError {
+        for (Book book: books) {
+            library.addBook(book);
+        }
     }
 
     @Test
@@ -22,10 +27,11 @@ public class LibraryTest {
         Assert.assertEquals(library.getName(), "biblioteca");
         Assert.assertEquals(library.getBookCount(), 5);
         Assert.assertEquals(library.getAvailableBookCount(), 5);
+        Assert.assertEquals(library.getAvailableBooks().size(), 5);
     }
 
     @Test
-    public void testAddBookMethod() {
+    public void testAddBookMethod() throws BookAlreadyExistError {
         library.addBook(new Book("F book", "F person", 2018));
         Assert.assertEquals(library.getBookCount(), 6);
         Assert.assertEquals(library.getAvailableBookCount(), 6);
@@ -36,7 +42,7 @@ public class LibraryTest {
     }
 
     @Test(expected = BookAlreadyExistError.class)
-    public void testAddExistingBookMethod() {
+    public void testAddExistingBookMethod() throws BookAlreadyExistError {
         library.addBook(new Book("E book", "E person", 2006));
     }
 }
