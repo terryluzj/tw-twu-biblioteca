@@ -8,7 +8,7 @@ import org.junit.Test;
 
 public class LibraryTest {
 
-    private static final Book[] books = new Book[] {
+    private final Book[] books = new Book[] {
             new Book("A book", "A person", 1986),
             new Book("B book", "B person", 1992),
             new Book("C book", "C person", 1979),
@@ -50,7 +50,7 @@ public class LibraryTest {
     }
 
     @Test
-    public void testCheckoutBookMethod() {
+    public void testCheckoutBookMethod() throws BookNotExistError {
         library.checkout(books[0]); // Checkout the very first item from the book list
         Assert.assertEquals(library.getBookCount(), 5);
         Assert.assertEquals(library.getAvailableBookCount(), 4);
@@ -65,7 +65,37 @@ public class LibraryTest {
     }
 
     @Test(expected = BookNotExistError.class )
-    public void testCheckoutInvalidBookMethod() {
+    public void testCheckoutInvalidBookMethod() throws BookNotExistError {
         library.checkout(new Book("H book", "H person", 2010));
+    }
+
+    @Test
+    public void testReturnBookMethod() throws BookNotExistError, BookAlreadyExistError {
+        library.checkout(books[0]);
+        library.checkout(books[1]);
+
+        library.returnBook(books[0]);
+        Assert.assertEquals(library.getBookCount(), 5);
+        Assert.assertEquals(library.getAvailableBookCount(), 4);
+        Assert.assertEquals(library.getAvailableBooks().size(), 4);
+
+        library.returnBook(books[1]);
+        Assert.assertEquals(library.getBookCount(), 5);
+        Assert.assertEquals(library.getAvailableBookCount(), 5);
+        Assert.assertEquals(library.getAvailableBooks().size(), 5);
+    }
+
+    @Test(expected = BookNotExistError.class)
+    public void testReturnInvalidBookMethod() throws BookNotExistError, BookAlreadyExistError {
+        library.checkout(books[0]);
+        library.checkout(books[1]);
+        library.returnBook(new Book("H book", "H person", 2010));
+    }
+
+    @Test(expected = BookAlreadyExistError.class)
+    public void testReturnExistingBookMethod() throws BookNotExistError, BookAlreadyExistError {
+        library.checkout(books[0]);
+        library.returnBook(books[0]);
+        library.returnBook(books[0]);
     }
 }

@@ -1,4 +1,4 @@
-package com.twu.biblioteca.component;
+package com.twu.biblioteca.exceptions;
 
 /**
  * Custom existing book resource exception class

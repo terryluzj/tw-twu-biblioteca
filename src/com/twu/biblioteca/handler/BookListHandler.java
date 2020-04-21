@@ -1,7 +1,7 @@
 package com.twu.biblioteca.handler;
 
 import com.twu.biblioteca.component.Book;
-import com.twu.biblioteca.component.BookAlreadyExistError;
+import com.twu.biblioteca.exceptions.BookAlreadyExistError;
 import com.twu.biblioteca.component.Library;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
