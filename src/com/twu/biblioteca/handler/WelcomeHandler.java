@@ -12,6 +12,18 @@ public class WelcomeHandler extends InputHandler {
     }
 
     /**
+     * Override parse input method
+     */
+    @Override
+    protected String[] parseInput(String input) {
+        if (!input.equals("1")) {
+            redirectFromInvalidInput();
+        }
+        return super.parseInput(input);
+    }
+
+
+    /**
      * Retrieve options given optional user input
      *
      * @param input User input
@@ -19,6 +31,6 @@ public class WelcomeHandler extends InputHandler {
      */
     @Override
     protected String[] retrieveOptions(String... input) {
-        return new String[] {"List of books"};
+        return new String[]{ "List of books" };
     }
 }

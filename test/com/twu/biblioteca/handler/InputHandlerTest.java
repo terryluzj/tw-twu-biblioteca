@@ -34,7 +34,7 @@ public class InputHandlerTest {
     @Test
     public void testPrintFallbackOption() {
         InputHandler.printFallbackOption();
-        Assert.assertEquals("(Type " + InputHandler.EXIT_FLAG + " to exit the program, or " + InputHandler.RETURN_FLAG + " to return to previous section)\n", outputStream.toString());
+        Assert.assertEquals("\n(Type " + InputHandler.EXIT_FLAG + " to exit the program, or " + InputHandler.RETURN_FLAG + " to return to previous section)\n", outputStream.toString());
     }
 
     @After

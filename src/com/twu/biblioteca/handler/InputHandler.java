@@ -18,6 +18,13 @@ public abstract class InputHandler {
     protected abstract void printHeading();
 
     /**
+     * Print footer message
+     */
+    protected void printFooter() {
+
+    }
+
+    /**
      * Retrieve options given optional user input
      * @param input User input
      * @return Array of options in string form
@@ -32,15 +39,18 @@ public abstract class InputHandler {
      * Public method to parse input to the specific input handler class
      */
     public void run(String... previousInput) {
-        this.printHeading();
-
         // Retrieve and display options
+        this.printHeading();
         String[] options = retrieveOptions(previousInput);
-        System.out.print(InputHandler.composeOptionString(this.optionWithIndex, options));
-        InputHandler.printFallbackOption();
+        System.out.print("\n" + InputHandler.composeOptionString(this.optionWithIndex, options));
+        this.printFooter();
+
+        InputHandler.printFallbackOption(); // Print fallback options
 
         // Parse and handling user input; delegate input to child handler or process with parent parsing method
         String userInput = scanner.nextLine();
+        System.out.println();
+
         if (userInput.equals(EXIT_FLAG)) {
             System.exit(0);
         }
@@ -49,7 +59,10 @@ public abstract class InputHandler {
         } else {
             String[] parseResult = this.parseInput(userInput);
             if (this.delegateHandler != null) {
-                this.delegateHandler.run(parseResult);
+                InputHandler handler = this.delegateHandler;
+                handler.run(parseResult);
+            } else {
+                System.exit(0);
             }
         }
     }
@@ -61,12 +74,20 @@ public abstract class InputHandler {
     protected String[] parseInput(String input) {
         try {
             Integer.parseInt(input);
+            return new String[]{ input };
         }
         catch (NumberFormatException e) {
-            System.out.println("Invalid input. Please select a valid options!");
-            this.run();
+            this.redirectFromInvalidInput();
+            return new String[]{ };
         }
-        return new String[]{ input };
+    }
+
+    /**
+     * Print message based on invalid input and run again
+     */
+    protected void redirectFromInvalidInput() {
+        System.out.println("Invalid input. Please select a valid options!");
+        this.run();
     }
 
     /**
@@ -108,6 +129,7 @@ public abstract class InputHandler {
      */
     protected static void printFallbackOption() {
         String fallbackString = "(Type" + " " + EXIT_FLAG + " " + "to exit the program, or " + RETURN_FLAG + " to return to previous section)";
+        System.out.println();
         System.out.print(InputHandler.composeOptionString(false, fallbackString));
     }
 

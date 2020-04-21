@@ -1,12 +1,11 @@
 package com.twu.biblioteca.component;
 
 import org.junit.Assert;
-import org.junit.BeforeClass;
+import org.junit.Before;
 import org.junit.Test;
 
 public class LibraryTest {
 
-    private static final Library library = new Library("biblioteca");
     private static final Book[] books = new Book[] {
             new Book("A book", "A person", 1986),
             new Book("B book", "B person", 1992),
@@ -15,8 +14,10 @@ public class LibraryTest {
             new Book("E book", "E person", 2006),
     };
 
-    @BeforeClass
-    public static void addBookToLibrary() throws BookAlreadyExistError {
+    private final Library library = new Library("biblioteca");
+
+    @Before
+    public void addBookToLibrary() throws BookAlreadyExistError {
         for (Book book: books) {
             library.addBook(book);
         }
