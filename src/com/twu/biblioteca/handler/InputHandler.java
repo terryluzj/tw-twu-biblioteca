@@ -1,5 +1,8 @@
 package com.twu.biblioteca.handler;
 
+import com.twu.biblioteca.component.Library;
+
+import java.util.HashMap;
 import java.util.Scanner;
 
 /**
@@ -9,8 +12,18 @@ public abstract class InputHandler {
 
     public static final String EXIT_FLAG = "EXIT";
     public static final String RETURN_FLAG = "RETURN";
+    public static final String CHECKOUT_ITEMS_KEY = "CHECKED_OUT";
 
+    protected static final HashMap<String, HashMap<String, Object>> bookSession = new HashMap<>();
+    protected static final Library library = new Library("Biblioteca");
     protected static final Scanner scanner = new Scanner(System.in);
+
+    protected final HashMap<String, HashMap<String, Object>> session;
+
+    public InputHandler() {
+        this.session = bookSession;
+        this.session.put(CHECKOUT_ITEMS_KEY, new HashMap<>());
+    }
 
     /**
      * Print heading message
@@ -21,7 +34,7 @@ public abstract class InputHandler {
      * Print footer message
      */
     protected void printFooter() {
-
+        System.out.println();
     }
 
     /**
@@ -31,7 +44,7 @@ public abstract class InputHandler {
      */
     protected abstract String[] retrieveOptions(String... input);
 
-    private InputHandler delegateHandler;
+    private InputHandler[] delegateHandler;
     private InputHandler previousHandler;
     private boolean optionWithIndex = true;
 
@@ -55,11 +68,12 @@ public abstract class InputHandler {
             System.exit(0);
         }
         else if (userInput.equals(RETURN_FLAG)) {
+            if (this.previousHandler == null) System.exit(0);
             this.previousHandler.run();
         } else {
-            String[] parseResult = this.parseInput(userInput);
+            String[] parseResult = this.parseInput(userInput, previousInput);
             if (this.delegateHandler != null) {
-                InputHandler handler = this.delegateHandler;
+                InputHandler handler = this.determineDelegate(userInput, previousInput);
                 handler.run(parseResult);
             } else {
                 System.exit(0);
@@ -68,10 +82,17 @@ public abstract class InputHandler {
     }
 
     /**
+     * Determine next delegate to be the first occurrence by default
+     */
+    protected InputHandler determineDelegate(String input, String... context) {
+        return this.delegateHandler[0];
+    }
+
+    /**
      * Standard method to parse user input
      * Only certain flag strings and number is allowed
      */
-    protected String[] parseInput(String input) {
+    protected String[] parseInput(String input, String... context) {
         try {
             Integer.parseInt(input);
             return new String[]{ input };
@@ -95,6 +116,16 @@ public abstract class InputHandler {
      */
     public void delegateTo(InputHandler inputHandler) {
         inputHandler.setPreviousHandler(this);
+        this.delegateHandler = new InputHandler[] { inputHandler };
+    }
+
+    /**
+     * Set next input handler to delegate result to
+     */
+    public void delegateTo(InputHandler[] inputHandler) {
+        for (InputHandler handler: inputHandler) {
+            handler.setPreviousHandler(this);
+        }
         this.delegateHandler = inputHandler;
     }
 
@@ -108,6 +139,16 @@ public abstract class InputHandler {
         }
         currentHandler.run();
     }
+
+    /**
+     * Getter for previous handler
+     */
+    protected InputHandler getPreviousHandler() { return this.previousHandler; }
+
+    /**
+     * Getter for delegate handler
+     */
+    protected InputHandler[] getDelegateHandler() { return this.delegateHandler.clone(); }
 
     /**
      * Set boolean flag to compose options with or without index
@@ -130,7 +171,7 @@ public abstract class InputHandler {
     protected static void printFallbackOption() {
         String fallbackString = "(Type" + " " + EXIT_FLAG + " " + "to exit the program, or " + RETURN_FLAG + " to return to previous section)";
         System.out.println();
-        System.out.print(InputHandler.composeOptionString(false, fallbackString));
+        System.out.println(InputHandler.composeOptionString(false, fallbackString));
     }
 
     /**
@@ -145,7 +186,8 @@ public abstract class InputHandler {
             if (withIndex) {
                 outputString.append("[").append(startIndex).append("]").append(" ");
             }
-            outputString.append(option).append("\n");
+            outputString.append(option);
+            if (startIndex != options.length) outputString.append("\n");
             startIndex++;
         }
         return outputString.toString();

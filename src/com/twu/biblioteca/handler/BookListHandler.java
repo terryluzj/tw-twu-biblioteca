@@ -2,7 +2,6 @@ package com.twu.biblioteca.handler;
 
 import com.twu.biblioteca.component.Book;
 import com.twu.biblioteca.exceptions.BookAlreadyExistError;
-import com.twu.biblioteca.component.Library;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -18,7 +17,6 @@ public class BookListHandler extends InputHandler {
 
     public static final int MAX_DISPLAY_ITEMS = 10;
     public static final String SHUFFLE_FLAG = "SHUFFLE";
-    protected static final Library library = new Library("Biblioteca");
 
     private Book[] bookOptionReference;
 
@@ -45,15 +43,15 @@ public class BookListHandler extends InputHandler {
      * Override parse input method
      */
     @Override
-    protected String[] parseInput(String input) {
+    protected String[] parseInput(String input, String... context) {
         if (input.equals(SHUFFLE_FLAG)) {
             this.run();
         }
         try {
             String[] parsedInput = super.parseInput(input);
-            Book bookReference = this.bookOptionReference[Integer.parseInt(parsedInput[0])];
+            Book bookReference = this.bookOptionReference[Integer.parseInt(parsedInput[0]) - 1];
             return new String[]{ bookReference.getDescription().getIdentifier() };
-        } catch (IndexOutOfBoundsException e) {
+        } catch (ArrayIndexOutOfBoundsException e) {
             this.redirectFromInvalidInput();
         }
         return new String[]{ };
@@ -64,7 +62,7 @@ public class BookListHandler extends InputHandler {
      */
     @Override
     protected void printHeading() {
-        System.out.println("Here are some of our selections:");
+        System.out.println("Here are some of our selections (only showing top " + MAX_DISPLAY_ITEMS + " items)");
     }
 
     /**
@@ -72,6 +70,7 @@ public class BookListHandler extends InputHandler {
      */
     @Override
     protected void printFooter() {
+        super.printFooter();
         System.out.println("\nCurrent number of available books: " + library.getAvailableBookCount());
         System.out.print("Type a digit to check out the one you find interesting. ");
         System.out.println("You can type SHUFFLE to generate a new list of books.");

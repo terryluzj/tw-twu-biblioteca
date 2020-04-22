@@ -22,13 +22,13 @@ public class InputHandlerTest {
     public void testComposeOptionsMethod() {
         Assert.assertEquals(
                 InputHandler.composeOptionString(true, "Option A", "Option B")
-                , String.join("\n", "[1] Option A", "[2] Option B") + "\n"
+                , String.join("\n", "[1] Option A", "[2] Option B")
         );
         Assert.assertEquals(
                 InputHandler.composeOptionString(true, "Another option A", "New option B", "Option C", "Option D")
-                , String.join("\n", "[1] Another option A", "[2] New option B", "[3] Option C", "[4] Option D") + "\n"
+                , String.join("\n", "[1] Another option A", "[2] New option B", "[3] Option C", "[4] Option D")
         );
-        Assert.assertEquals(InputHandler.composeOptionString(false, "Option A", "Option B"), String.join("\n", "Option A", "Option B") + "\n");
+        Assert.assertEquals(InputHandler.composeOptionString(false, "Option A", "Option B"), String.join("\n", "Option A", "Option B"));
     }
 
     @Test

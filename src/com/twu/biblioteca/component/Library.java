@@ -70,6 +70,13 @@ public class Library {
         this.returnBook(bookObject);
     }
 
+    public Book getBookByIdentifier(String identifier) throws BookNotExistError {
+        if (!this.bookCollection.containsKey(identifier)) {
+            throw new BookNotExistError("There is no record of this book in the library!");
+        }
+        return this.bookCollection.get(identifier);
+    }
+
     public int getBookCount() {
         return this.bookCount;
     }

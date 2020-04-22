@@ -34,6 +34,11 @@ public class LibraryTest {
     }
 
     @Test
+    public void testGetter() throws BookNotExistError {
+        Assert.assertEquals(library.getBookByIdentifier("A book by A person, 1986"), books[0]);
+    }
+
+    @Test
     public void testAddBookMethod() throws BookAlreadyExistError {
         library.addBook(new Book("F book", "F person", 2018));
         Assert.assertEquals(library.getBookCount(), 6);

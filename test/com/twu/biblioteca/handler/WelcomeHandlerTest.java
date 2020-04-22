@@ -23,6 +23,7 @@ public class WelcomeHandlerTest extends InputHandlerTest {
     public void testPrintWelcomeMessageMethod() {
         welcomeHandler.printHeading();
         Assert.assertEquals("Welcome to Biblioteca. Your one-stop-shop for great book titles in Bangalore!\n"
+                + "We currently have " + InputHandler.library.getAvailableBookCount() + " books for you to browse.\n"
                 + "Enter a digit corresponding with the option that you want to proceed with.\n",
                 outputStream.toString());
     }
