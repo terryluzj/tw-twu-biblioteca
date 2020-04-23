@@ -12,20 +12,20 @@ public class WelcomeHandlerTest extends InputHandlerTest {
     @Test
     public void testRetrieveOptionsMethod() {
         String[] options = welcomeHandler.retrieveOptions();
-        Assert.assertArrayEquals(new String[]{"List of books"}, options);
+        Assert.assertArrayEquals(new String[]{"List of books", "List of movies"}, options);
     }
 
     @Test
     public void testParseInputMethod() {
         String[] result = welcomeHandler.parseInput("1");
-        Assert.assertArrayEquals(new String[]{"1"}, result);
+        Assert.assertArrayEquals(new String[]{"0", "List of books"}, result);
     }
 
     @Test
     public void testPrintWelcomeMessageMethod() {
         welcomeHandler.printHeading();
-        Assert.assertEquals("Welcome to Biblioteca. Your one-stop-shop for great book titles in Bangalore!\n"
-                + "We currently have " + welcomeHandler.getLibrary().getAvailableBookCount() + " books for you to browse.\n"
+        Assert.assertEquals("Welcome to Biblioteca. Your one-stop-shop for great titles in Bangalore!\n"
+                + "We currently have 0 books and 0 movies for you to browse.\n"
                 + "Enter a digit corresponding with the option that you want to proceed with.\n",
                 outputStream.toString());
     }

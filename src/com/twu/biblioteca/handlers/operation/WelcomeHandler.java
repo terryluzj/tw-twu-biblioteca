@@ -1,7 +1,11 @@
 package com.twu.biblioteca.handlers.operation;
 
 import com.twu.biblioteca.components.Library;
+import com.twu.biblioteca.components.item.RentalItemType;
 import com.twu.biblioteca.handlers.InputHandler;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class WelcomeHandler extends InputHandler {
 
@@ -14,8 +18,10 @@ public class WelcomeHandler extends InputHandler {
      */
     @Override
     protected void printHeading() {
-        System.out.println("Welcome to Biblioteca. Your one-stop-shop for great book titles in Bangalore!");
-        System.out.println("We currently have " + library.getAvailableBookCount() + " books for you to browse.");
+        System.out.println("Welcome to Biblioteca. Your one-stop-shop for great titles in Bangalore!");
+        System.out.println("We currently have "
+                + library.getAvailableItemCount(RentalItemType.BOOK) + " books and "
+                + library.getAvailableItemCount(RentalItemType.MOVIE) + " movies for you to browse.");
         System.out.println("Enter a digit corresponding with the option that you want to proceed with.");
     }
 
@@ -29,7 +35,7 @@ public class WelcomeHandler extends InputHandler {
         if (index < 1 || index > options.length) {
             this.redirectFromInvalidInput();
         }
-        return super.parseInput(input);
+        return new String[] { Integer.toString(index - 1), this.optionReference[index - 1].toString() };
     }
 
     /**
@@ -37,10 +43,7 @@ public class WelcomeHandler extends InputHandler {
      */
     @Override
     protected InputHandler determineDelegate(String input, String... context) {
-        if (this.session.get(InputHandler.CHECKOUT_ITEMS_KEY).size() > 0) {
-            return this.getDelegateHandler()[Integer.parseInt(input) - 1];
-        }
-        return super.determineDelegate(input, context);
+        return this.getDelegateHandler()[Integer.parseInt(input) - 1];
     }
 
 
@@ -52,9 +55,18 @@ public class WelcomeHandler extends InputHandler {
      */
     @Override
     protected String[] retrieveOptions(String... input) {
-        if (this.session.get(InputHandler.CHECKOUT_ITEMS_KEY).size() > 0) {
-            return new String[]{"List of books", "Return books"};
+        ArrayList<String> initialOptions = new ArrayList<String>(Arrays.asList("List of books", "List of movies"));
+        ArrayList<String> optionReference = new ArrayList<>(initialOptions);
+        for (RentalItemType itemType: RentalItemType.values()) {
+            if (
+                    ITEM_SESSION.get(CHECKOUT_ITEMS_KEY).containsKey(itemType.toString()) &&
+                    ITEM_SESSION.get(CHECKOUT_ITEMS_KEY).get(itemType.toString()).size() > 0)
+            {
+                initialOptions.add("Return " + itemType.toString().toLowerCase() + " items");
+                optionReference.add(itemType.toString());
+            }
         }
-        return new String[]{ "List of books" };
+        this.assignReference(optionReference.toArray());
+        return initialOptions.toArray(new String[0]);
     }
 }

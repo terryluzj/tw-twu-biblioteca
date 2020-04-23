@@ -14,16 +14,19 @@ public abstract class InputHandler {
     public static final String RETURN_FLAG = "RETURN";
     public static final String CHECKOUT_ITEMS_KEY = "CHECKED_OUT";
 
-    protected static final HashMap<String, HashMap<String, Object>> itemSession = new HashMap<>();
-    protected static final Scanner scanner = new Scanner(System.in);
+    protected static final HashMap<String, HashMap<String, HashMap<String, Object>>> ITEM_SESSION = new HashMap<>();
+    protected static final Scanner SCANNER = new Scanner(System.in);
+
+    static {
+        ITEM_SESSION.put(CHECKOUT_ITEMS_KEY, new HashMap<>());
+    }
 
     protected final Library library;
-    protected final HashMap<String, HashMap<String, Object>> session;
+
+    protected Object[] optionReference;
 
     public InputHandler(Library library) {
         this.library = library;
-        this.session = itemSession;
-        this.session.put(CHECKOUT_ITEMS_KEY, new HashMap<>());
     }
 
     /**
@@ -62,7 +65,7 @@ public abstract class InputHandler {
         InputHandler.printFallbackOption(); // Print fallback options
 
         // Parse and handling user input; delegate input to child handler or process with parent parsing method
-        String userInput = scanner.nextLine();
+        String userInput = SCANNER.nextLine();
         System.out.println();
 
         if (userInput.equals(EXIT_FLAG)) {
@@ -139,6 +142,13 @@ public abstract class InputHandler {
             currentHandler = currentHandler.previousHandler;
         }
         currentHandler.run();
+    }
+
+    /**
+     * Create option reference from string array
+     */
+    public void assignReference(Object[] optionReference) {
+        this.optionReference = optionReference;
     }
 
     /**

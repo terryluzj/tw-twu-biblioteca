@@ -1,8 +1,6 @@
 package com.twu.biblioteca.components;
 
 import com.twu.biblioteca.components.item.*;
-import com.twu.biblioteca.exceptions.BookAlreadyExistError;
-import com.twu.biblioteca.exceptions.BookNotExistError;
 import com.twu.biblioteca.exceptions.RentalItemAlreadyExistError;
 import com.twu.biblioteca.exceptions.RentalItemNotExistError;
 
@@ -83,7 +81,7 @@ public class Library {
      * @return Item count
      */
     public int getItemCount(RentalItemType itemType) {
-        return this.itemCollectionCount.get(itemType);
+        return this.itemCollectionCount.get(itemType) != null ? this.itemCollectionCount.get(itemType) : 0;
     }
 
     /**
@@ -91,7 +89,7 @@ public class Library {
      * @param itemType Item type
      */
     public int getAvailableItemCount(RentalItemType itemType) {
-        return this.getAvailableItems(itemType).size();
+        return this.itemCollection.containsKey(itemType) ? this.getAvailableItems(itemType).size() : 0;
     }
 
     /**
@@ -120,40 +118,9 @@ public class Library {
         }
         RentalItem itemInLibrary = items.get(identifier);
         if (itemInLibrary.getStatus().equals(RentalItemStatus.IN_LIBRARY)) {
-            throw new BookAlreadyExistError("The item is in the library!");
+            throw new RentalItemAlreadyExistError("The item is in the library!");
         }
         itemInLibrary.setStatus(RentalItemStatus.IN_LIBRARY);
-    }
-
-    public void returnBook(Book book) throws BookNotExistError, BookAlreadyExistError {
-        String identifier = book.getDescription().getIdentifier();
-        if (!this.bookCollection.containsKey(identifier)) {
-            throw new BookNotExistError("There is no record of this book in the library!");
-        }
-        Book bookInLibrary = this.bookCollection.get(identifier);
-        if (bookInLibrary.getStatus().equals(RentalItemStatus.IN_LIBRARY)) {
-            throw new BookAlreadyExistError("The book is in librabry!");
-        }
-        bookInLibrary.setStatus(RentalItemStatus.IN_LIBRARY);
-    }
-
-    public Book getBookByIdentifier(String identifier) throws BookNotExistError {
-        if (!this.bookCollection.containsKey(identifier)) {
-            throw new BookNotExistError("There is no record of this book in the library!");
-        }
-        return this.bookCollection.get(identifier);
-    }
-
-    public int getAvailableBookCount() {
-        return this.getAvailableBooks().size();
-    }
-
-    public Collection<Book> getAvailableBooks() {
-        return this.bookCollection
-                .values()
-                .stream()
-                .filter(book -> book.getStatus().equals(RentalItemStatus.IN_LIBRARY))
-                .collect(Collectors.toList());
     }
 
     public String getName() {

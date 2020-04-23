@@ -3,6 +3,7 @@ package com.twu.biblioteca;
 import com.twu.biblioteca.components.Library;
 import com.twu.biblioteca.handlers.*;
 import com.twu.biblioteca.handlers.item.BookListHandler;
+import com.twu.biblioteca.handlers.item.MovieListHandler;
 import com.twu.biblioteca.handlers.operation.CheckoutHandler;
 import com.twu.biblioteca.handlers.operation.ReturnHandler;
 import com.twu.biblioteca.handlers.operation.WelcomeHandler;
@@ -17,11 +18,15 @@ public class BibliotecaApp {
         BookListHandler bookListHandler = new BookListHandler(library);
         bookListHandler.loadItemData();
 
+        MovieListHandler movieListHandler = new MovieListHandler(library);
+        movieListHandler.loadItemData();
+
         CheckoutHandler checkoutHandler = new CheckoutHandler(library);
         ReturnHandler returnHandler = new ReturnHandler(library);
 
-        welcomeHandler.delegateTo(new InputHandler[] {bookListHandler, returnHandler});
+        welcomeHandler.delegateTo(new InputHandler[] {bookListHandler, movieListHandler, returnHandler});
         bookListHandler.delegateTo(checkoutHandler);
+        movieListHandler.delegateTo(checkoutHandler);
 
         welcomeHandler.run();
     }

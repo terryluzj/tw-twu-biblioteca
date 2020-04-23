@@ -1,12 +1,15 @@
 package com.twu.biblioteca.handlers.operation;
 
 import com.twu.biblioteca.components.Library;
-import com.twu.biblioteca.components.item.Book;
-import com.twu.biblioteca.exceptions.BookNotExistError;
+import com.twu.biblioteca.components.item.RentalItem;
+import com.twu.biblioteca.components.item.RentalItemType;
 import com.twu.biblioteca.exceptions.RentalItemNotExistError;
 import com.twu.biblioteca.handlers.InputHandler;
 
+import java.util.HashMap;
+
 public class CheckoutHandler extends InputHandler {
+
     public CheckoutHandler(Library library) {
         super(library);
     }
@@ -27,13 +30,17 @@ public class CheckoutHandler extends InputHandler {
         // Trigger confirmation intent for user
         if (input.equals("Y")) {
             try {
-                Book book = library.getBookByIdentifier(context[0]);
-                library.checkout(book);
-                this.session.get(InputHandler.CHECKOUT_ITEMS_KEY).put(book.getDescription().getIdentifier(), true);
-                System.out.println("Thank you! Enjoy the book by " + book.getAuthor() + "!");
+                RentalItem item = library.getItemByIdentifier(RentalItemType.valueOf(context[1]), context[0]);
+                String itemType = item.getType().toString();
+                library.checkout(item);
+                if (!ITEM_SESSION.get(CHECKOUT_ITEMS_KEY).containsKey(itemType)) {
+                    ITEM_SESSION.get(CHECKOUT_ITEMS_KEY).put(itemType, new HashMap<>());
+                }
+                ITEM_SESSION.get(CHECKOUT_ITEMS_KEY).get(itemType).put(item.getDescription().getIdentifier(), item);
+                System.out.println("Thank you! Enjoy " + item.getName() + "!");
                 this.backToTop();
             } catch (RentalItemNotExistError | IndexOutOfBoundsException e) {
-                System.out.println("You cannot checkout this book. (" + e.getMessage() + ")");
+                System.out.println("You cannot checkout this item. (" + e.getMessage() + ")");
                 this.getPreviousHandler().run();
             }
         } else if (input.equals("N")) {
@@ -54,6 +61,6 @@ public class CheckoutHandler extends InputHandler {
     @Override
     protected String[] retrieveOptions(String... input) {
         this.setOptionWithIndex(false);
-        return new String[] { "Book: " + input[0], "[Y] Yes", "[N] No" };
+        return new String[] { input[0], "[Y] Yes", "[N] No" };
     }
 }

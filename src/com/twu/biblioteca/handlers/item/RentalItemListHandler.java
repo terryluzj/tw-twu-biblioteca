@@ -25,11 +25,12 @@ public abstract class RentalItemListHandler extends InputHandler {
     private final RentalItemType rentalType;
     private final JSONArray itemData;
 
+    private String[] lastOptions;
+
     /**
      * Abstract method for creating instance from loaded data
      */
     public abstract void loadItemData() throws RentalItemAlreadyExistError;
-    protected RentalItem[] rentalItemsReference;
 
     /**
      * Abstract rental item list input handler class
@@ -70,12 +71,13 @@ public abstract class RentalItemListHandler extends InputHandler {
     @Override
     protected String[] parseInput(String input, String... context) {
         if (input.equals(SHUFFLE_FLAG)) {
+            this.lastOptions = null;
             this.run();
         }
         try {
             String[] parsedInput = super.parseInput(input);
-            RentalItem itemReference = this.rentalItemsReference[Integer.parseInt(parsedInput[0]) - 1];
-            return new String[]{ itemReference.getDescription().getIdentifier() };
+            RentalItem itemReference = (RentalItem) this.optionReference[Integer.parseInt(parsedInput[0]) - 1];
+            return new String[]{ itemReference.getDescription().getIdentifier(), itemReference.getType().toString() };
         } catch (ArrayIndexOutOfBoundsException e) {
             this.redirectFromInvalidInput();
         }
@@ -90,20 +92,26 @@ public abstract class RentalItemListHandler extends InputHandler {
      */
     @Override
     protected String[] retrieveOptions(String... input) {
+        if (this.lastOptions != null) {
+            return this.lastOptions;
+        }
+
         ArrayList<RentalItem> rentalItemCollection = new ArrayList<>(this.library.getAvailableItems(this.rentalType));
         Collections.shuffle(rentalItemCollection);
 
         int maximumReturn = Math.min(MAX_DISPLAY_ITEMS, rentalItemCollection.size());
         String[] itemStringCollection = new String[maximumReturn];
-        this.rentalItemsReference = new RentalItem[maximumReturn];
+        this.assignReference(new RentalItem[maximumReturn]);
 
         int count = 0;
         for (RentalItem item: rentalItemCollection) {
             itemStringCollection[count] = item.getDescription().toString();
-            this.rentalItemsReference[count] = item;
+            this.optionReference[count] = item;
             count++;
             if (count >= maximumReturn) break;
         }
+
+        this.lastOptions = itemStringCollection;
 
         return itemStringCollection;
     }

@@ -1,16 +1,18 @@
 package com.twu.biblioteca.handlers.operation;
 
 import com.twu.biblioteca.components.Library;
-import com.twu.biblioteca.components.item.Book;
-import com.twu.biblioteca.exceptions.BookAlreadyExistError;
-import com.twu.biblioteca.exceptions.BookNotExistError;
+import com.twu.biblioteca.components.item.RentalItem;
+import com.twu.biblioteca.components.item.RentalItemType;
+import com.twu.biblioteca.exceptions.RentalItemAlreadyExistError;
+import com.twu.biblioteca.exceptions.RentalItemNotExistError;
 import com.twu.biblioteca.handlers.InputHandler;
 
 import java.util.HashMap;
+import java.util.NoSuchElementException;
 
 public class ReturnHandler extends InputHandler {
 
-    private String[] bookIdentifierReference;
+    private RentalItemType rentalItemType;
 
     public ReturnHandler(Library library) {
         super(library);
@@ -31,15 +33,18 @@ public class ReturnHandler extends InputHandler {
     protected String[] parseInput(String input, String... context) {
         try {
             String[] parsedInput = super.parseInput(input);
-            String bookIdentifier = this.bookIdentifierReference[Integer.parseInt(parsedInput[0]) - 1];
-            Book book = library.getBookByIdentifier(bookIdentifier);
-            library.returnBook(book);
-            this.session.get(InputHandler.CHECKOUT_ITEMS_KEY).remove(bookIdentifier);
-            System.out.println("Thank you for returning the book! Please leave a review if you like it.");
+            String itemIdentifier = (String) this.optionReference[Integer.parseInt(parsedInput[0]) - 1];
+            RentalItem item = library.getItemByIdentifier(this.rentalItemType, itemIdentifier);
+            library.returnItem(item);
+            if (!ITEM_SESSION.get(CHECKOUT_ITEMS_KEY).containsKey(this.rentalItemType.toString())) {
+                throw new NoSuchElementException("Item session not found!");
+            }
+            ITEM_SESSION.get(CHECKOUT_ITEMS_KEY).get(this.rentalItemType.toString()).remove(itemIdentifier);
+            System.out.println("Thank you for returning the item! Please leave a review if you like it.");
             this.backToTop();
-            return new String[]{ bookIdentifier };
-        } catch (ArrayIndexOutOfBoundsException | BookNotExistError | BookAlreadyExistError e) {
-            System.out.println("That is not a valid book to return");
+            return new String[]{ itemIdentifier };
+        } catch (ArrayIndexOutOfBoundsException | RentalItemNotExistError | RentalItemAlreadyExistError e) {
+            System.out.println("That is not a valid item to return.");
             this.redirectFromInvalidInput();
         }
         return new String[]{ };
@@ -53,8 +58,15 @@ public class ReturnHandler extends InputHandler {
      */
     @Override
     protected String[] retrieveOptions(String... input) {
-        HashMap<String, Object> map = this.session.get(InputHandler.CHECKOUT_ITEMS_KEY);
-        this.bookIdentifierReference = this.session.get(InputHandler.CHECKOUT_ITEMS_KEY).keySet().toArray(new String[map.size()]);
-        return this.bookIdentifierReference;
+        try {
+            String optionType = input[1];
+            this.rentalItemType = RentalItemType.valueOf(optionType);
+            HashMap<String, Object> map = ITEM_SESSION.get(CHECKOUT_ITEMS_KEY).get(optionType);
+            this.assignReference(map.keySet().toArray(new String[0]));
+            return (String[]) this.optionReference;
+        } catch (IndexOutOfBoundsException e) {
+            this.redirectFromInvalidInput();
+            return new String[]{ };
+        }
     }
 }
