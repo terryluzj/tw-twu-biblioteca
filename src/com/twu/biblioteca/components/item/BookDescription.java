@@ -1,4 +1,4 @@
-package com.twu.biblioteca.component.item;
+package com.twu.biblioteca.components.item;
 
 /**
  * Book description class

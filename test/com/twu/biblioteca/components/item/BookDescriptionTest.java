@@ -1,4 +1,4 @@
-package com.twu.biblioteca.component.item;
+package com.twu.biblioteca.components.item;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -9,7 +9,7 @@ public class BookDescriptionTest {
 
     @Test
     public void testProperty() {
-        Assert.assertEquals(bookDescription.getIdentifier(), "A book by A person, 2020");
-        Assert.assertEquals(bookDescription.toString(), "A book by A person, 2020");
+        Assert.assertEquals("A book by A person, 2020", bookDescription.getIdentifier());
+        Assert.assertEquals("A book by A person, 2020", bookDescription.toString());
     }
 }

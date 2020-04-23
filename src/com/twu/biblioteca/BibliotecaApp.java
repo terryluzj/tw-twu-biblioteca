@@ -1,17 +1,24 @@
 package com.twu.biblioteca;
 
-import com.twu.biblioteca.handler.*;
+import com.twu.biblioteca.components.Library;
+import com.twu.biblioteca.handlers.*;
+import com.twu.biblioteca.handlers.item.BookListHandler;
+import com.twu.biblioteca.handlers.operation.CheckoutHandler;
+import com.twu.biblioteca.handlers.operation.ReturnHandler;
+import com.twu.biblioteca.handlers.operation.WelcomeHandler;
 
 public class BibliotecaApp {
 
     protected void start() {
-        WelcomeHandler welcomeHandler = new WelcomeHandler();
+        Library library = new Library("biblioteca");
 
-        BookListHandler bookListHandler = new BookListHandler();
-        BookListHandler.loadData();
+        WelcomeHandler welcomeHandler = new WelcomeHandler(library);
 
-        CheckoutHandler checkoutHandler = new CheckoutHandler();
-        ReturnHandler returnHandler = new ReturnHandler();
+        BookListHandler bookListHandler = new BookListHandler(library);
+        bookListHandler.loadItemData();
+
+        CheckoutHandler checkoutHandler = new CheckoutHandler(library);
+        ReturnHandler returnHandler = new ReturnHandler(library);
 
         welcomeHandler.delegateTo(new InputHandler[] {bookListHandler, returnHandler});
         bookListHandler.delegateTo(checkoutHandler);

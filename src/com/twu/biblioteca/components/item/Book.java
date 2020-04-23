@@ -1,4 +1,4 @@
-package com.twu.biblioteca.component.item;
+package com.twu.biblioteca.components.item;
 
 public class Book extends RentalItem {
 
@@ -13,7 +13,7 @@ public class Book extends RentalItem {
      * @param publishYear Book publishing year
      */
     public Book(String name, String author, int publishYear) {
-        super(name);
+        super(name, RentalItemType.BOOK);
         this.author = author;
         this.publishYear = publishYear;
         this.description = new BookDescription(name, author, publishYear);

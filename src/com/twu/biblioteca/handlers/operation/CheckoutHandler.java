@@ -3,6 +3,7 @@ package com.twu.biblioteca.handlers.operation;
 import com.twu.biblioteca.components.Library;
 import com.twu.biblioteca.components.item.Book;
 import com.twu.biblioteca.exceptions.BookNotExistError;
+import com.twu.biblioteca.exceptions.RentalItemNotExistError;
 import com.twu.biblioteca.handlers.InputHandler;
 
 public class CheckoutHandler extends InputHandler {
@@ -31,7 +32,7 @@ public class CheckoutHandler extends InputHandler {
                 this.session.get(InputHandler.CHECKOUT_ITEMS_KEY).put(book.getDescription().getIdentifier(), true);
                 System.out.println("Thank you! Enjoy the book by " + book.getAuthor() + "!");
                 this.backToTop();
-            } catch (BookNotExistError | IndexOutOfBoundsException e) {
+            } catch (RentalItemNotExistError | IndexOutOfBoundsException e) {
                 System.out.println("You cannot checkout this book. (" + e.getMessage() + ")");
                 this.getPreviousHandler().run();
             }

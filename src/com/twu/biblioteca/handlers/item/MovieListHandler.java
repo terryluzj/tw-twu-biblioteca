@@ -20,13 +20,22 @@ public class MovieListHandler extends RentalItemListHandler {
         for (Object o : this.getItemData()) {
             JSONObject movie = (JSONObject) o;
             try {
-                this.getLibrary().addItem(new Movie(
-                        (String) movie.get("movie_title"),
-                        (String) movie.get("director"),
-                        (String) movie.get("genre"),
-                        Math.toIntExact((Long) movie.get("year")),
-                        (Double) movie.get("rating"))
-                );
+                if (movie.get("rating") != null) {
+                    this.getLibrary().addItem(new Movie(
+                            (String) movie.get("movie_title"),
+                            (String) movie.get("director"),
+                            (String) movie.get("genre"),
+                            Math.toIntExact((Long) movie.get("year")),
+                            (Double) movie.get("rating"))
+                    );
+                } else {
+                    this.getLibrary().addItem(new Movie(
+                            (String) movie.get("movie_title"),
+                            (String) movie.get("director"),
+                            (String) movie.get("genre"),
+                            Math.toIntExact((Long) movie.get("year")))
+                    );
+                }
             } catch (RentalItemAlreadyExistError rentalItemAlreadyExistError) {
                 rentalItemAlreadyExistError.printStackTrace();
             }
