@@ -3,9 +3,8 @@ package com.twu.biblioteca.component;
 /**
  * Book description class
  */
-public class BookDescription {
+public class BookDescription extends RentalItemDescriptor {
 
-    private final String name;
     private final String author;
     private final int publishYear;
 
@@ -16,7 +15,7 @@ public class BookDescription {
      * @param publishYear Book publishing year
      */
     public BookDescription(String name, String author, int publishYear) {
-        this.name = name;
+        super(name);
         this.author = author;
         this.publishYear = publishYear;
     }
@@ -25,6 +24,6 @@ public class BookDescription {
 
     @Override
     public String toString() {
-        return String.join(" ", this.name, "by", this.author) + ", " + this.publishYear;
+        return String.join(" ", super.toString(), "by", this.author) + ", " + this.publishYear;
     }
 }

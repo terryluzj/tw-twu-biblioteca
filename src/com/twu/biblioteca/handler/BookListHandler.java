@@ -2,14 +2,12 @@ package com.twu.biblioteca.handler;
 
 import com.twu.biblioteca.component.Book;
 import com.twu.biblioteca.exceptions.BookAlreadyExistError;
+import com.twu.biblioteca.utils.JSONLoader;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import java.io.FileReader;
 import java.io.IOException;
-import java.io.Reader;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -24,9 +22,9 @@ public class BookListHandler extends InputHandler {
      * Load mock data from JSON file
      */
     public static void loadData() {
-        JSONParser parser = new JSONParser();
-        try (Reader reader = new FileReader("book_data.json")) {
-            JSONArray jsonObject = (JSONArray) parser.parse(reader);
+        try {
+            JSONLoader loader = new JSONLoader();
+            JSONArray jsonObject = loader.load("book_data.json");
             for (Object o: jsonObject) {
                 JSONObject book = (JSONObject) o;
                 library.addBook(new Book(
