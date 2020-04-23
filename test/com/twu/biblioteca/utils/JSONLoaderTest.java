@@ -20,6 +20,6 @@ public class JSONLoaderTest {
     @Test
     public void testLoadJSONObject() throws IOException, ParseException {
         JSONArray jsonObjectArray = jsonLoader.load("movie_data.json");
-        Assert.assertEquals(((JSONObject) jsonObjectArray.get(0)).get("movie_title"), "Ivans xtc.");
+        Assert.assertEquals("Ornamental Hairpin (Kanzashi)", ((JSONObject) jsonObjectArray.get(0)).get("movie_title"));
     }
 }

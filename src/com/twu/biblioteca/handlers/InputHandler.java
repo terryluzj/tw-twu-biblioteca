@@ -1,6 +1,6 @@
-package com.twu.biblioteca.handler;
+package com.twu.biblioteca.handlers;
 
-import com.twu.biblioteca.component.Library;
+import com.twu.biblioteca.components.Library;
 
 import java.util.HashMap;
 import java.util.Scanner;
@@ -140,6 +140,11 @@ public abstract class InputHandler {
         }
         currentHandler.run();
     }
+
+    /**
+     * Getter for library
+     */
+    public Library getLibrary() { return this.library; }
 
     /**
      * Getter for previous handler

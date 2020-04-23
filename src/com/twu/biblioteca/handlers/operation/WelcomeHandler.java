@@ -1,6 +1,13 @@
-package com.twu.biblioteca.handler;
+package com.twu.biblioteca.handlers.operation;
+
+import com.twu.biblioteca.components.Library;
+import com.twu.biblioteca.handlers.InputHandler;
 
 public class WelcomeHandler extends InputHandler {
+
+    public WelcomeHandler(Library library) {
+        super(library);
+    }
 
     /**
      * Print heading message

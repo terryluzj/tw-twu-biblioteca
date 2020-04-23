@@ -1,14 +1,20 @@
-package com.twu.biblioteca.handler;
+package com.twu.biblioteca.handlers.operation;
 
-import com.twu.biblioteca.component.item.Book;
+import com.twu.biblioteca.components.Library;
+import com.twu.biblioteca.components.item.Book;
 import com.twu.biblioteca.exceptions.BookAlreadyExistError;
 import com.twu.biblioteca.exceptions.BookNotExistError;
+import com.twu.biblioteca.handlers.InputHandler;
 
 import java.util.HashMap;
 
 public class ReturnHandler extends InputHandler {
 
     private String[] bookIdentifierReference;
+
+    public ReturnHandler(Library library) {
+        super(library);
+    }
 
     /**
      * Print heading message

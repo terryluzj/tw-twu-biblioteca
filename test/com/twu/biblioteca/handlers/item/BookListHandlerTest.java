@@ -1,7 +1,8 @@
-package com.twu.biblioteca.handler.item;
+package com.twu.biblioteca.handlers.item;
 
-import com.twu.biblioteca.component.item.Book;
-import com.twu.biblioteca.exceptions.BookAlreadyExistError;
+import com.twu.biblioteca.components.Library;
+import com.twu.biblioteca.components.item.Book;
+import com.twu.biblioteca.exceptions.RentalItemAlreadyExistError;
 import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -16,23 +17,23 @@ public class BookListHandlerTest {
             new Book("E book", "E person", 2006),
     };
 
-    private final BookListHandler bookListHandler = new BookListHandler();
+    private static final BookListHandler bookListHandler = new BookListHandler(new Library("Test Library"));
 
     @BeforeClass
-    public static void addBookToLibrary() throws BookAlreadyExistError {
+    public static void addBookToLibrary() throws RentalItemAlreadyExistError {
         for (Book book: books) {
-            BookListHandler.library.addBook(book);
+            bookListHandler.getLibrary().addItem(book);
         }
     }
 
     @Test
-    public void testRetrieveOptionsMethod() throws BookAlreadyExistError {
+    public void testRetrieveOptionsMethod() throws RentalItemAlreadyExistError {
         String[] options = bookListHandler.retrieveOptions();
         Assert.assertEquals(5, options.length);
-        for (int index = 0; index <= 100; index++) {
-            BookListHandler.library.addBook(new Book("Some book written for 100 years", "People", 1900 + index));
+        for (int index = 0; index < 100; index++) {
+            bookListHandler.getLibrary().addItem(new Book("Some book written for 100 years", "People", 1900 + index));
         }
         options = bookListHandler.retrieveOptions();
-        Assert.assertEquals(BookListHandler.MAX_DISPLAY_ITEMS, options.length); // Only showing top 20 results
+        Assert.assertEquals(15, options.length); // Only showing top 15 results
     }
 }
