@@ -15,12 +15,25 @@ public abstract class InputHandler {
     public static final String RETURN_FLAG = "RETURN";
     public static final String CHECKOUT_ITEMS_KEY = "CHECKED_OUT";
 
-    protected static final HashMap<String, HashMap<String, HashMap<String, Object>>> ITEM_SESSION = new HashMap<>();
     protected static User SIGNED_IN_AS = null;
+    protected static final HashMap<
+            User,
+            HashMap<String, HashMap<String, HashMap<String, Object>>>> USER_SESSIONS = new HashMap<>();
     protected static final Scanner SCANNER = new Scanner(System.in);
 
-    static {
-        ITEM_SESSION.put(CHECKOUT_ITEMS_KEY, new HashMap<>());
+    protected static void initiateUserSession() {
+        if (!USER_SESSIONS.containsKey(SIGNED_IN_AS)) {
+            USER_SESSIONS.put(SIGNED_IN_AS, new HashMap<>());
+            InputHandler.getCurrentUserSession().put(CHECKOUT_ITEMS_KEY, new HashMap<>());
+        }
+    }
+
+    protected static HashMap<String, HashMap<String, HashMap<String, Object>>> getCurrentUserSession() {
+        return USER_SESSIONS.get(SIGNED_IN_AS);
+    }
+
+    protected static HashMap<String, HashMap<String, Object>> getCurrentUserCheckoutItems() {
+        return InputHandler.getCurrentUserSession().get(CHECKOUT_ITEMS_KEY);
     }
 
     protected final Library library;

@@ -33,10 +33,10 @@ public class CheckoutHandler extends InputHandler {
                 RentalItem item = library.getItemByIdentifier(RentalItemType.valueOf(context[1]), context[0]);
                 String itemType = item.getType().toString();
                 library.checkout(item);
-                if (!ITEM_SESSION.get(CHECKOUT_ITEMS_KEY).containsKey(itemType)) {
-                    ITEM_SESSION.get(CHECKOUT_ITEMS_KEY).put(itemType, new HashMap<>());
+                if (!InputHandler.getCurrentUserCheckoutItems().containsKey(itemType)) {
+                    InputHandler.getCurrentUserCheckoutItems().put(itemType, new HashMap<>());
                 }
-                ITEM_SESSION.get(CHECKOUT_ITEMS_KEY).get(itemType).put(item.getDescription().getIdentifier(), item);
+                InputHandler.getCurrentUserCheckoutItems().get(itemType).put(item.getDescription().getIdentifier(), item);
                 System.out.println("Thank you! Enjoy " + item.getName() + "!");
                 this.backToTop();
             } catch (RentalItemNotExistError | IndexOutOfBoundsException e) {

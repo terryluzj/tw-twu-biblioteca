@@ -59,8 +59,8 @@ public class WelcomeHandler extends InputHandler {
         ArrayList<String> optionReference = new ArrayList<>(initialOptions);
         for (RentalItemType itemType: RentalItemType.values()) {
             if (
-                    ITEM_SESSION.get(CHECKOUT_ITEMS_KEY).containsKey(itemType.toString()) &&
-                    ITEM_SESSION.get(CHECKOUT_ITEMS_KEY).get(itemType.toString()).size() > 0)
+                    InputHandler.getCurrentUserCheckoutItems().containsKey(itemType.toString()) &&
+                    InputHandler.getCurrentUserCheckoutItems().get(itemType.toString()).size() > 0)
             {
                 initialOptions.add("Return " + itemType.toString().toLowerCase() + " items");
                 optionReference.add(itemType.toString());

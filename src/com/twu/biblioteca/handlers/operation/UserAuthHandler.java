@@ -76,8 +76,9 @@ public class UserAuthHandler extends InputHandler {
         if (authenticatedUser == null) {
             System.out.println("We couldn't authenticate you as the password is incorrect. Please try again!\n");
             this.run();
-        } else{
+        } else {
             SIGNED_IN_AS = authenticatedUser;
+            InputHandler.initiateUserSession();
             System.out.println("Welcome back " + user.getName() + "!\n");
             this.handleUserInput("");
         }
