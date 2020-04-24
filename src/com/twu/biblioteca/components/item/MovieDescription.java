@@ -4,7 +4,6 @@ package com.twu.biblioteca.components.item;
  * Movie description class
  */
 public class MovieDescription extends RentalItemDescriptor {
-
     private final String director;
     private final String genre;
     private final int airedIn;
@@ -17,7 +16,12 @@ public class MovieDescription extends RentalItemDescriptor {
      * @param genre Movie genre in string form
      * @param airedIn Year the movie was aired
      */
-    public MovieDescription(String name, String director, String genre, int airedIn) {
+    public MovieDescription(
+        String name,
+        String director,
+        String genre,
+        int airedIn
+    ) {
         super(name);
         this.director = director;
         this.genre = genre;
@@ -32,7 +36,13 @@ public class MovieDescription extends RentalItemDescriptor {
      * @param airedIn Year the movie was aired
      * @param rating Movie rating
      */
-    public MovieDescription(String name, String director, String genre, int airedIn, double rating) {
+    public MovieDescription(
+        String name,
+        String director,
+        String genre,
+        int airedIn,
+        double rating
+    ) {
         super(name);
         this.director = director;
         this.genre = genre;
@@ -40,18 +50,31 @@ public class MovieDescription extends RentalItemDescriptor {
         this.rating = rating;
     }
 
-    public String getIdentifier() { return this.getBaseString(); }
+    public String getIdentifier() {
+        return this.getBaseString();
+    }
 
     @Override
     public String toString() {
         String baseString = this.getBaseString();
         if (this.rating >= 0) {
-            return baseString + " (" + "Genre: " + this.genre + ", Rating: " + this.rating + ")";
-        }
-        else return baseString + " (" + "Genre: " + this.genre + ")";
+            return (
+                baseString +
+                " (" +
+                "Genre: " +
+                this.genre +
+                ", Rating: " +
+                this.rating +
+                ")"
+            );
+        } else return baseString + " (" + "Genre: " + this.genre + ")";
     }
 
     private String getBaseString() {
-        return String.join(" ", super.toString(), "by", this.director) + ", " + this.airedIn;
+        return (
+            String.join(" ", super.toString(), "by", this.director) +
+            ", " +
+            this.airedIn
+        );
     }
 }

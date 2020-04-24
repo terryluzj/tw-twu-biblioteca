@@ -1,19 +1,23 @@
 package com.twu.biblioteca.components.item;
 
+import java.security.InvalidParameterException;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.security.InvalidParameterException;
-
 public class MovieTest {
-
-    private final Movie movie = new Movie("Test movie", "Terry", "comedy", 2020, 10.0);
+    private final Movie movie = new Movie(
+        "Test movie",
+        "Terry",
+        "comedy",
+        2020,
+        10.0
+    );
 
     @Test
     public void testProperty() {
         Assert.assertEquals(
-                "Test movie by Terry, 2020 (Genre: comedy, Rating: 10.0)",
-                movie.getDescription().toString()
+            "Test movie by Terry, 2020 (Genre: comedy, Rating: 10.0)",
+            movie.getDescription().toString()
         );
         Assert.assertEquals("Test movie", movie.getName());
         Assert.assertEquals("Terry", movie.getDirector());

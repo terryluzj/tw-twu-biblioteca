@@ -6,18 +6,16 @@ import com.twu.biblioteca.components.item.RentalItemType;
 import com.twu.biblioteca.exceptions.RentalItemAlreadyExistError;
 import com.twu.biblioteca.handlers.InputHandler;
 import com.twu.biblioteca.utils.JSONLoader;
-import org.json.simple.JSONArray;
-import org.json.simple.parser.ParseException;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import org.json.simple.JSONArray;
+import org.json.simple.parser.ParseException;
 
 /**
  * Rental item list handler abstract class
  */
 public abstract class RentalItemListHandler extends InputHandler {
-
     public static final String SHUFFLE_FLAG = "SHUFFLE";
     public static int MAX_DISPLAY_ITEMS = 15;
 
@@ -38,7 +36,11 @@ public abstract class RentalItemListHandler extends InputHandler {
      * @param rentalType Rental item enum type
      * @param loadFromFileName File name string
      */
-    public RentalItemListHandler(Library library, RentalItemType rentalType, String loadFromFileName) {
+    public RentalItemListHandler(
+        Library library,
+        RentalItemType rentalType,
+        String loadFromFileName
+    ) {
         super(library);
         this.rentalType = rentalType;
         this.fileName = loadFromFileName;
@@ -63,7 +65,9 @@ public abstract class RentalItemListHandler extends InputHandler {
      * Getter for item data
      * @return JSON object data
      */
-    public JSONArray getItemData() { return this.itemData; }
+    public JSONArray getItemData() {
+        return this.itemData;
+    }
 
     /**
      * Override parse input method
@@ -76,12 +80,18 @@ public abstract class RentalItemListHandler extends InputHandler {
         }
         try {
             String[] parsedInput = super.parseInput(input);
-            RentalItem itemReference = (RentalItem) this.optionReference[Integer.parseInt(parsedInput[0]) - 1];
-            return new String[]{ itemReference.getDescription().getIdentifier(), itemReference.getType().toString() };
+            RentalItem itemReference = (RentalItem) this.optionReference[Integer.parseInt(
+                    parsedInput[0]
+                ) -
+                1];
+            return new String[] {
+                itemReference.getDescription().getIdentifier(),
+                itemReference.getType().toString(),
+            };
         } catch (ArrayIndexOutOfBoundsException e) {
             this.redirectFromInvalidInput();
         }
-        return new String[]{ };
+        return new String[] {  };
     }
 
     /**
@@ -96,15 +106,20 @@ public abstract class RentalItemListHandler extends InputHandler {
             return this.lastOptions;
         }
 
-        ArrayList<RentalItem> rentalItemCollection = new ArrayList<>(this.library.getAvailableItems(this.rentalType));
+        ArrayList<RentalItem> rentalItemCollection = new ArrayList<>(
+            this.library.getAvailableItems(this.rentalType)
+        );
         Collections.shuffle(rentalItemCollection);
 
-        int maximumReturn = Math.min(MAX_DISPLAY_ITEMS, rentalItemCollection.size());
+        int maximumReturn = Math.min(
+            MAX_DISPLAY_ITEMS,
+            rentalItemCollection.size()
+        );
         String[] itemStringCollection = new String[maximumReturn];
         this.assignReference(new RentalItem[maximumReturn]);
 
         int count = 0;
-        for (RentalItem item: rentalItemCollection) {
+        for (RentalItem item : rentalItemCollection) {
             itemStringCollection[count] = item.getDescription().toString();
             this.optionReference[count] = item;
             count++;
@@ -121,9 +136,13 @@ public abstract class RentalItemListHandler extends InputHandler {
      */
     @Override
     protected void printHeading() {
-        System.out.println("Here are some of our selections (only showing top "
-                + MAX_DISPLAY_ITEMS + " "
-                + this.rentalType.toString().toLowerCase() + " items)");
+        System.out.println(
+            "Here are some of our selections (only showing top " +
+            MAX_DISPLAY_ITEMS +
+            " " +
+            this.rentalType.toString().toLowerCase() +
+            " items)"
+        );
     }
 
     /**
@@ -132,11 +151,17 @@ public abstract class RentalItemListHandler extends InputHandler {
     @Override
     protected void printFooter() {
         super.printFooter();
-        System.out.println("\nCurrent number of available "
-                + this.rentalType.toString().toLowerCase()
-                + " items : "
-                + this.library.getAvailableItemCount(this.rentalType));
-        System.out.println("Type a digit to check out the one you find interesting.");
-        System.out.println("HINT: you can type SHUFFLE to generate a new list of items.");
+        System.out.println(
+            "\nCurrent number of available " +
+            this.rentalType.toString().toLowerCase() +
+            " items : " +
+            this.library.getAvailableItemCount(this.rentalType)
+        );
+        System.out.println(
+            "Type a digit to check out the one you find interesting."
+        );
+        System.out.println(
+            "HINT: you can type SHUFFLE to generate a new list of items."
+        );
     }
 }

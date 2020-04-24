@@ -1,15 +1,13 @@
 package com.twu.biblioteca.utils;
 
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.Reader;
 import org.json.simple.JSONArray;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.Reader;
-
 public class JSONLoader {
-
     protected JSONParser jsonParser = new JSONParser();
 
     /**

@@ -20,11 +20,14 @@ public class BookListHandler extends RentalItemListHandler {
         for (Object o : this.getItemData()) {
             JSONObject book = (JSONObject) o;
             try {
-                this.getLibrary().addItem(new Book(
-                        (String) book.get("book_name"),
-                        (String) book.get("author"),
-                        Math.toIntExact((Long) book.get("publication_year")))
-                );
+                this.getLibrary()
+                    .addItem(
+                        new Book(
+                            (String) book.get("book_name"),
+                            (String) book.get("author"),
+                            Math.toIntExact((Long) book.get("publication_year"))
+                        )
+                    );
             } catch (RentalItemAlreadyExistError rentalItemAlreadyExistError) {
                 rentalItemAlreadyExistError.printStackTrace();
             }

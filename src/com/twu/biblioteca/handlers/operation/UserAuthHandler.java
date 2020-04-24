@@ -4,18 +4,16 @@ import com.twu.biblioteca.components.Library;
 import com.twu.biblioteca.components.User;
 import com.twu.biblioteca.handlers.InputHandler;
 import com.twu.biblioteca.utils.JSONLoader;
+import java.io.IOException;
+import java.util.HashMap;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
-
-import java.io.IOException;
-import java.util.HashMap;
 
 /**
  * User authentication handler class
  */
 public class UserAuthHandler extends InputHandler {
-
     private static final String USER_FILE = "user_data.json";
     private HashMap<String, User> userPool = new HashMap<>();
     private HashMap<String, String> userCredentials = new HashMap<>();
@@ -34,13 +32,16 @@ public class UserAuthHandler extends InputHandler {
             for (Object o : userData) {
                 JSONObject user = (JSONObject) o;
                 User newUser = new User(
-                        (String) user.get("code"),
-                        (String) user.get("first_name"),
-                        (String) user.get("last_name"),
-                        (String) user.get("email")
+                    (String) user.get("code"),
+                    (String) user.get("first_name"),
+                    (String) user.get("last_name"),
+                    (String) user.get("email")
                 );
                 this.userPool.put(newUser.getIdentifier(), newUser);
-                this.userCredentials.put(newUser.getIdentifier(), (String) user.get("password"));
+                this.userCredentials.put(
+                        newUser.getIdentifier(),
+                        (String) user.get("password")
+                    );
             }
         } catch (IOException | ParseException e) {
             e.printStackTrace();
@@ -63,10 +64,11 @@ public class UserAuthHandler extends InputHandler {
         User user = this.findUser(code);
 
         if (user == null) {
-            System.out.println("We couldn't find any user with this code! Please try again!\n");
+            System.out.println(
+                "We couldn't find any user with this code! Please try again!\n"
+            );
             this.run();
-        }
-        else {
+        } else {
             System.out.print("Please enter your password: ");
         }
 
@@ -74,7 +76,9 @@ public class UserAuthHandler extends InputHandler {
         User authenticatedUser = this.authenticateUser(code, password);
 
         if (authenticatedUser == null) {
-            System.out.println("We couldn't authenticate you as the password is incorrect. Please try again!\n");
+            System.out.println(
+                "We couldn't authenticate you as the password is incorrect. Please try again!\n"
+            );
             this.run();
         } else {
             SIGNED_IN_AS = authenticatedUser;
@@ -103,13 +107,14 @@ public class UserAuthHandler extends InputHandler {
         return null;
     }
 
-
     /**
      * Print heading message
      */
     @Override
     protected void printHeading() {
-        System.out.println("Hi! please enter your credentials so we can log you in.");
+        System.out.println(
+            "Hi! please enter your credentials so we can log you in."
+        );
     }
 
     /**
@@ -117,7 +122,7 @@ public class UserAuthHandler extends InputHandler {
      */
     @Override
     protected String[] parseInput(String input, String... context) {
-        return new String[]{ };
+        return new String[] {  };
     }
 
     /**
@@ -128,7 +133,7 @@ public class UserAuthHandler extends InputHandler {
      */
     @Override
     protected String[] retrieveOptions(String... input) {
-        return new String[]{ };
+        return new String[] {  };
     }
 
     /**

@@ -4,7 +4,6 @@ package com.twu.biblioteca.components.item;
  * Book description class
  */
 public class BookDescription extends RentalItemDescriptor {
-
     private final String author;
     private final int publishYear;
 
@@ -20,10 +19,16 @@ public class BookDescription extends RentalItemDescriptor {
         this.publishYear = publishYear;
     }
 
-    public String getIdentifier() { return this.toString(); }
+    public String getIdentifier() {
+        return this.toString();
+    }
 
     @Override
     public String toString() {
-        return String.join(" ", super.toString(), "by", this.author) + ", " + this.publishYear;
+        return (
+            String.join(" ", super.toString(), "by", this.author) +
+            ", " +
+            this.publishYear
+        );
     }
 }

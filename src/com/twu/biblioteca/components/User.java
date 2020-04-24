@@ -1,7 +1,6 @@
 package com.twu.biblioteca.components;
 
 public class User {
-
     private final String identifier;
     private final String name;
     private final String email;
@@ -19,9 +18,15 @@ public class User {
         this.email = email;
     }
 
-    public String getIdentifier() { return this.identifier; }
+    public String getIdentifier() {
+        return this.identifier;
+    }
 
-    public String getName() { return this.name; }
+    public String getName() {
+        return this.name;
+    }
 
-    public String getEmail() { return this.email; }
+    public String getEmail() {
+        return this.email;
+    }
 }

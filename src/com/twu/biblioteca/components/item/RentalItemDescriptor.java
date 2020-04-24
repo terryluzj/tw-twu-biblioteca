@@ -8,12 +8,11 @@ interface RentalItemDescriptorInterface {
     String toString();
 }
 
-
 /**
  * Rental item descriptor
  */
-public abstract class RentalItemDescriptor implements RentalItemDescriptorInterface {
-
+public abstract class RentalItemDescriptor
+    implements RentalItemDescriptorInterface {
     private final String name;
 
     public RentalItemDescriptor(String name) {

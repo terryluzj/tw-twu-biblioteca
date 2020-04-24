@@ -3,7 +3,6 @@ package com.twu.biblioteca.components.item;
 import java.security.InvalidParameterException;
 
 public class Movie extends RentalItem {
-
     private final String director;
     private final String genre;
     private final int airedIn;
@@ -17,18 +16,27 @@ public class Movie extends RentalItem {
      * @param airedIn Year the movie was aired
      * @param rating Movie rating
      */
-    public Movie(String name, String director, String genre, int airedIn, double rating) {
+    public Movie(
+        String name,
+        String director,
+        String genre,
+        int airedIn,
+        double rating
+    ) {
         super(name, RentalItemType.MOVIE);
         this.director = director;
         this.genre = genre;
         this.airedIn = airedIn;
 
         if (rating < 0 || rating > 10) {
-            throw new InvalidParameterException("Rating should be between 0 and 10.");
+            throw new InvalidParameterException(
+                "Rating should be between 0 and 10."
+            );
         }
 
         this.rating = rating;
-        this.description = new MovieDescription(name, director, genre, airedIn, rating);
+        this.description =
+            new MovieDescription(name, director, genre, airedIn, rating);
     }
 
     /**
@@ -53,11 +61,15 @@ public class Movie extends RentalItem {
         return this.director;
     }
 
-    public String getGenre() { return this.genre; }
+    public String getGenre() {
+        return this.genre;
+    }
 
     public int getAiredInYear() {
         return this.airedIn;
     }
 
-    public double getRating() { return this.rating; }
+    public double getRating() {
+        return this.rating;
+    }
 }

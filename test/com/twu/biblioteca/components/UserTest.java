@@ -4,8 +4,12 @@ import org.junit.Assert;
 import org.junit.Test;
 
 public class UserTest {
-
-    private final User user = new User("12345", "Terry", "Lu", "terrylu@mail.com");
+    private final User user = new User(
+        "12345",
+        "Terry",
+        "Lu",
+        "terrylu@mail.com"
+    );
 
     @Test
     public void testProperty() {

@@ -29,7 +29,13 @@ public class BibliotecaApp {
         ReturnHandler returnHandler = new ReturnHandler(library);
 
         userAuthHandler.delegateTo(welcomeHandler);
-        welcomeHandler.delegateTo(new InputHandler[] {bookListHandler, movieListHandler, returnHandler});
+        welcomeHandler.delegateTo(
+            new InputHandler[] {
+                bookListHandler,
+                movieListHandler,
+                returnHandler,
+            }
+        );
         bookListHandler.delegateTo(checkoutHandler);
         movieListHandler.delegateTo(checkoutHandler);
 

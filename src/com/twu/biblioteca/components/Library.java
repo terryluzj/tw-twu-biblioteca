@@ -3,13 +3,11 @@ package com.twu.biblioteca.components;
 import com.twu.biblioteca.components.item.*;
 import com.twu.biblioteca.exceptions.RentalItemAlreadyExistError;
 import com.twu.biblioteca.exceptions.RentalItemNotExistError;
-
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.stream.Collectors;
 
 public class Library {
-
     private final String name;
     private final HashMap<String, Book> bookCollection;
     private final HashMap<RentalItemType, HashMap<String, RentalItem>> itemCollection;
@@ -40,11 +38,17 @@ public class Library {
             this.itemCollection.put(itemType, new HashMap<>());
             this.itemCollectionCount.put(itemType, 0);
         }
-        HashMap<String, RentalItem> items = this.itemCollection.get(item.getType());
+        HashMap<String, RentalItem> items =
+            this.itemCollection.get(item.getType());
         if (items.containsKey(identifier)) {
-            throw new RentalItemAlreadyExistError("This item already exists in the library!");
+            throw new RentalItemAlreadyExistError(
+                "This item already exists in the library!"
+            );
         }
-        this.itemCollectionCount.put(itemType, this.itemCollectionCount.get(itemType) + 1);
+        this.itemCollectionCount.put(
+                itemType,
+                this.itemCollectionCount.get(itemType) + 1
+            );
         items.put(identifier, item);
     }
 
@@ -53,12 +57,13 @@ public class Library {
      * @param itemType Item type
      */
     public Collection<RentalItem> getAvailableItems(RentalItemType itemType) {
-        return this.itemCollection
-                .get(itemType)
-                .values()
-                .stream()
-                .filter(book -> book.getStatus().equals(RentalItemStatus.IN_LIBRARY))
-                .collect(Collectors.toList());
+        return this.itemCollection.get(itemType)
+            .values()
+            .stream()
+            .filter(
+                book -> book.getStatus().equals(RentalItemStatus.IN_LIBRARY)
+            )
+            .collect(Collectors.toList());
     }
 
     /**
@@ -67,10 +72,16 @@ public class Library {
      * @param itemIdentifier Item identifier
      * @return Rental item in record
      */
-    public RentalItem getItemByIdentifier(RentalItemType itemType, String itemIdentifier) throws RentalItemNotExistError {
+    public RentalItem getItemByIdentifier(
+        RentalItemType itemType,
+        String itemIdentifier
+    )
+        throws RentalItemNotExistError {
         HashMap<String, RentalItem> items = this.itemCollection.get(itemType);
         if (!items.containsKey(itemIdentifier)) {
-            throw new RentalItemNotExistError("There is not such item in the library!");
+            throw new RentalItemNotExistError(
+                "There is not such item in the library!"
+            );
         }
         return items.get(itemIdentifier);
     }
@@ -81,7 +92,9 @@ public class Library {
      * @return Item count
      */
     public int getItemCount(RentalItemType itemType) {
-        return this.itemCollectionCount.get(itemType) != null ? this.itemCollectionCount.get(itemType) : 0;
+        return this.itemCollectionCount.get(itemType) != null
+            ? this.itemCollectionCount.get(itemType)
+            : 0;
     }
 
     /**
@@ -89,7 +102,9 @@ public class Library {
      * @param itemType Item type
      */
     public int getAvailableItemCount(RentalItemType itemType) {
-        return this.itemCollection.containsKey(itemType) ? this.getAvailableItems(itemType).size() : 0;
+        return this.itemCollection.containsKey(itemType)
+            ? this.getAvailableItems(itemType).size()
+            : 0;
     }
 
     /**
@@ -99,26 +114,37 @@ public class Library {
      */
     public void checkout(RentalItem item) throws RentalItemNotExistError {
         String identifier = item.getDescription().getIdentifier();
-        HashMap<String, RentalItem> items = this.itemCollection.get(item.getType());
+        HashMap<String, RentalItem> items =
+            this.itemCollection.get(item.getType());
         if (!items.containsKey(identifier)) {
-            throw new RentalItemNotExistError("The item does not exist in the library!");
+            throw new RentalItemNotExistError(
+                "The item does not exist in the library!"
+            );
         }
         RentalItem itemInLibrary = items.get(identifier);
         if (itemInLibrary.getStatus().equals(RentalItemStatus.CHECKED_OUT)) {
-            throw new RentalItemNotExistError("You cannot check out this item as it is already been checked out.");
+            throw new RentalItemNotExistError(
+                "You cannot check out this item as it is already been checked out."
+            );
         }
         itemInLibrary.setStatus(RentalItemStatus.CHECKED_OUT);
     }
 
-    public void returnItem(RentalItem item) throws RentalItemNotExistError, RentalItemAlreadyExistError {
+    public void returnItem(RentalItem item)
+        throws RentalItemNotExistError, RentalItemAlreadyExistError {
         String identifier = item.getDescription().getIdentifier();
-        HashMap<String, RentalItem> items = this.itemCollection.get(item.getType());
+        HashMap<String, RentalItem> items =
+            this.itemCollection.get(item.getType());
         if (!items.containsKey(identifier)) {
-            throw new RentalItemNotExistError("There is no record of this item in the library!");
+            throw new RentalItemNotExistError(
+                "There is no record of this item in the library!"
+            );
         }
         RentalItem itemInLibrary = items.get(identifier);
         if (itemInLibrary.getStatus().equals(RentalItemStatus.IN_LIBRARY)) {
-            throw new RentalItemAlreadyExistError("The item is in the library!");
+            throw new RentalItemAlreadyExistError(
+                "The item is in the library!"
+            );
         }
         itemInLibrary.setStatus(RentalItemStatus.IN_LIBRARY);
     }
@@ -127,4 +153,3 @@ public class Library {
         return this.name;
     }
 }
-

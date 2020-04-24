@@ -11,7 +11,6 @@ interface RentalItemInterface {
  * Rental item abstract class
  */
 public abstract class RentalItem implements RentalItemInterface {
-
     private final String name;
     private final RentalItemType type;
     private RentalItemDescriptor description;
@@ -43,5 +42,7 @@ public abstract class RentalItem implements RentalItemInterface {
         this.itemStatus = status;
     }
 
-    public RentalItemType getType() { return this.type; }
+    public RentalItemType getType() {
+        return this.type;
+    }
 }

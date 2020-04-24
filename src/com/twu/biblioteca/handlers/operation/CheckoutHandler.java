@@ -5,7 +5,6 @@ import com.twu.biblioteca.components.item.RentalItem;
 import com.twu.biblioteca.components.item.RentalItemType;
 import com.twu.biblioteca.exceptions.RentalItemNotExistError;
 import com.twu.biblioteca.handlers.InputHandler;
-
 import java.util.HashMap;
 
 public class CheckoutHandler extends InputHandler {
@@ -19,7 +18,9 @@ public class CheckoutHandler extends InputHandler {
      */
     @Override
     protected void printHeading() {
-        System.out.println("You're checking out the following item, please confirm by entering Y or N:");
+        System.out.println(
+            "You're checking out the following item, please confirm by entering Y or N:"
+        );
     }
 
     /**
@@ -30,26 +31,39 @@ public class CheckoutHandler extends InputHandler {
         // Trigger confirmation intent for user
         if (input.equals("Y")) {
             try {
-                RentalItem item = library.getItemByIdentifier(RentalItemType.valueOf(context[1]), context[0]);
+                RentalItem item = library.getItemByIdentifier(
+                    RentalItemType.valueOf(context[1]),
+                    context[0]
+                );
                 String itemType = item.getType().toString();
                 library.checkout(item);
-                if (!InputHandler.getCurrentUserCheckoutItems().containsKey(itemType)) {
-                    InputHandler.getCurrentUserCheckoutItems().put(itemType, new HashMap<>());
+                if (
+                    !InputHandler
+                        .getCurrentUserCheckoutItems()
+                        .containsKey(itemType)
+                ) {
+                    InputHandler
+                        .getCurrentUserCheckoutItems()
+                        .put(itemType, new HashMap<>());
                 }
-                InputHandler.getCurrentUserCheckoutItems().get(itemType).put(item.getDescription().getIdentifier(), item);
+                InputHandler
+                    .getCurrentUserCheckoutItems()
+                    .get(itemType)
+                    .put(item.getDescription().getIdentifier(), item);
                 System.out.println("Thank you! Enjoy " + item.getName() + "!");
                 this.backToTop();
             } catch (RentalItemNotExistError | IndexOutOfBoundsException e) {
-                System.out.println("You cannot checkout this item. (" + e.getMessage() + ")");
+                System.out.println(
+                    "You cannot checkout this item. (" + e.getMessage() + ")"
+                );
                 this.getPreviousHandler().run();
             }
         } else if (input.equals("N")) {
             this.getPreviousHandler().run();
-        }
-        else {
+        } else {
             this.run(context);
         }
-        return new String[]{ };
+        return new String[] {  };
     }
 
     /**

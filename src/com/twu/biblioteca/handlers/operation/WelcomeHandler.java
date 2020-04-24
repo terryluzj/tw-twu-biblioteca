@@ -3,7 +3,6 @@ package com.twu.biblioteca.handlers.operation;
 import com.twu.biblioteca.components.Library;
 import com.twu.biblioteca.components.item.RentalItemType;
 import com.twu.biblioteca.handlers.InputHandler;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -18,11 +17,19 @@ public class WelcomeHandler extends InputHandler {
      */
     @Override
     protected void printHeading() {
-        System.out.println("Welcome to Biblioteca. Your one-stop-shop for great titles in Bangalore!");
-        System.out.println("We currently have "
-                + library.getAvailableItemCount(RentalItemType.BOOK) + " books and "
-                + library.getAvailableItemCount(RentalItemType.MOVIE) + " movies for you to browse.");
-        System.out.println("Enter a digit corresponding with the option that you want to proceed with.");
+        System.out.println(
+            "Welcome to Biblioteca. Your one-stop-shop for great titles in Bangalore!"
+        );
+        System.out.println(
+            "We currently have " +
+            library.getAvailableItemCount(RentalItemType.BOOK) +
+            " books and " +
+            library.getAvailableItemCount(RentalItemType.MOVIE) +
+            " movies for you to browse."
+        );
+        System.out.println(
+            "Enter a digit corresponding with the option that you want to proceed with."
+        );
     }
 
     /**
@@ -35,7 +42,10 @@ public class WelcomeHandler extends InputHandler {
         if (index < 1 || index > options.length) {
             this.redirectFromInvalidInput();
         }
-        return new String[]{ Integer.toString(index - 1), this.optionReference[index - 1].toString() };
+        return new String[] {
+            Integer.toString(index - 1),
+            this.optionReference[index - 1].toString(),
+        };
     }
 
     /**
@@ -46,7 +56,6 @@ public class WelcomeHandler extends InputHandler {
         return this.getDelegateHandler()[Integer.parseInt(input) - 1];
     }
 
-
     /**
      * Retrieve options given optional user input
      *
@@ -55,14 +64,24 @@ public class WelcomeHandler extends InputHandler {
      */
     @Override
     protected String[] retrieveOptions(String... input) {
-        ArrayList<String> initialOptions = new ArrayList<String>(Arrays.asList("List of books", "List of movies"));
+        ArrayList<String> initialOptions = new ArrayList<String>(
+            Arrays.asList("List of books", "List of movies")
+        );
         ArrayList<String> optionReference = new ArrayList<>(initialOptions);
-        for (RentalItemType itemType: RentalItemType.values()) {
+        for (RentalItemType itemType : RentalItemType.values()) {
             if (
-                    InputHandler.getCurrentUserCheckoutItems().containsKey(itemType.toString()) &&
-                    InputHandler.getCurrentUserCheckoutItems().get(itemType.toString()).size() > 0)
-            {
-                initialOptions.add("Return " + itemType.toString().toLowerCase() + " items");
+                InputHandler
+                    .getCurrentUserCheckoutItems()
+                    .containsKey(itemType.toString()) &&
+                InputHandler
+                    .getCurrentUserCheckoutItems()
+                    .get(itemType.toString())
+                    .size() >
+                0
+            ) {
+                initialOptions.add(
+                    "Return " + itemType.toString().toLowerCase() + " items"
+                );
                 optionReference.add(itemType.toString());
             }
         }

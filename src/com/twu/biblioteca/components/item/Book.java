@@ -1,7 +1,6 @@
 package com.twu.biblioteca.components.item;
 
 public class Book extends RentalItem {
-
     private final String author;
     private final int publishYear;
     private final BookDescription description;
