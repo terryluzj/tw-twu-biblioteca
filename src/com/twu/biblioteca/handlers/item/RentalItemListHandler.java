@@ -25,7 +25,7 @@ public abstract class RentalItemListHandler extends InputHandler {
     private final RentalItemType rentalType;
     private final JSONArray itemData;
 
-    private String[] lastOptions;
+    protected String[] lastOptions;
 
     /**
      * Abstract method for creating instance from loaded data

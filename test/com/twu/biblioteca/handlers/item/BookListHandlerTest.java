@@ -33,6 +33,7 @@ public class BookListHandlerTest {
         for (int index = 0; index < 100; index++) {
             bookListHandler.getLibrary().addItem(new Book("Some book written for 100 years", "People", 1900 + index));
         }
+        bookListHandler.lastOptions = null;
         options = bookListHandler.retrieveOptions();
         Assert.assertEquals(15, options.length); // Only showing top 15 results
     }

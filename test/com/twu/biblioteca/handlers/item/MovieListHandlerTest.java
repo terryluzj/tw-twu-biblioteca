@@ -33,6 +33,7 @@ public class MovieListHandlerTest {
         for (int index = 0; index < 100; index++) {
             movieListHandler.getLibrary().addItem(new Movie("Some movie performed for 100 years", "People", "drama", 1900 + index, Math.random() * 10));
         }
+        movieListHandler.lastOptions = null;
         options = movieListHandler.retrieveOptions();
         Assert.assertEquals(15, options.length); // Only showing top 15 results
     }

@@ -35,7 +35,7 @@ public class WelcomeHandler extends InputHandler {
         if (index < 1 || index > options.length) {
             this.redirectFromInvalidInput();
         }
-        return new String[] { Integer.toString(index - 1), this.optionReference[index - 1].toString() };
+        return new String[]{ Integer.toString(index - 1), this.optionReference[index - 1].toString() };
     }
 
     /**
