@@ -1,5 +1,19 @@
 [
     {
+        "code": "1",
+        "first_name": "Terry",
+        "last_name": "Lu",
+        "email": "terry@mail.com",
+        "password": "123"
+    },
+    {
+        "code": "2",
+        "first_name": "Another Terry",
+        "last_name": "Lu",
+        "email": "terry@mail.com",
+        "password": "123"
+    },
+    {
         "code": "66689-694305",
         "first_name": "Elsbeth",
         "last_name": "Wasselin",

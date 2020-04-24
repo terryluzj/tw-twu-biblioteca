@@ -13,9 +13,9 @@ public abstract class InputHandler {
     public static final String RETURN_FLAG = "RETURN";
     public static final String CHECKOUT_ITEMS_KEY = "CHECKED_OUT";
 
-    protected static User SIGNED_IN_AS = null;
-    protected static final HashMap<User, HashMap<String, HashMap<String, HashMap<String, Object>>>> USER_SESSIONS = new HashMap<>();
     protected static final Scanner SCANNER = new Scanner(System.in);
+    protected static User SIGNED_IN_AS = null;
+    protected static HashMap<User, HashMap<String, HashMap<String, HashMap<String, Object>>>> USER_SESSIONS = new HashMap<>();
 
     protected static void initiateUserSession() {
         if (!USER_SESSIONS.containsKey(SIGNED_IN_AS)) {
@@ -61,7 +61,8 @@ public abstract class InputHandler {
      */
     protected abstract String[] retrieveOptions(String... input);
 
-    private InputHandler[] delegateHandler;
+    private InputHandler delegateHandler;
+    private HashMap<String, InputHandler> delegateHandlerMap;
     private InputHandler previousHandler;
     private boolean optionWithIndex = true;
 
@@ -119,9 +120,8 @@ public abstract class InputHandler {
         String... previousInput
     ) {
         String[] parseResult = this.parseInput(userInput, previousInput);
-        if (this.delegateHandler != null) {
-            InputHandler handler =
-                this.determineDelegate(userInput, previousInput);
+        if (this.delegateHandler != null || this.delegateHandlerMap != null) {
+            InputHandler handler = this.determineDelegate(parseResult);
             handler.run(parseResult);
         } else {
             System.exit(0);
@@ -131,8 +131,11 @@ public abstract class InputHandler {
     /**
      * Determine next delegate to be the first occurrence by default
      */
-    protected InputHandler determineDelegate(String input, String... context) {
-        return this.delegateHandler[0];
+    protected InputHandler determineDelegate(String... input) {
+        if (this.delegateHandlerMap != null) {
+            return this.delegateHandlerMap.get(input[0]);
+        }
+        return this.delegateHandler;
     }
 
     /**
@@ -162,17 +165,17 @@ public abstract class InputHandler {
      */
     public void delegateTo(InputHandler inputHandler) {
         inputHandler.setPreviousHandler(this);
-        this.delegateHandler = new InputHandler[] { inputHandler };
+        this.delegateHandler = inputHandler;
     }
 
     /**
      * Set next input handler to delegate result to
      */
-    public void delegateTo(InputHandler[] inputHandler) {
-        for (InputHandler handler : inputHandler) {
+    public void delegateTo(HashMap<String, InputHandler> inputHandler) {
+        for (InputHandler handler : inputHandler.values()) {
             handler.setPreviousHandler(this);
         }
-        this.delegateHandler = inputHandler;
+        this.delegateHandlerMap = inputHandler;
     }
 
     /**
@@ -210,8 +213,15 @@ public abstract class InputHandler {
     /**
      * Getter for delegate handler
      */
-    protected InputHandler[] getDelegateHandler() {
-        return this.delegateHandler.clone();
+    protected InputHandler getDelegateHandler() {
+        return this.delegateHandler;
+    }
+
+    /**
+     * Getter for delegate handler map
+     */
+    protected HashMap<String, InputHandler> getDelegateHandlerMap() {
+        return this.delegateHandlerMap;
     }
 
     /**

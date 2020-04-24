@@ -3,20 +3,26 @@ package com.twu.biblioteca.handlers;
 import com.twu.biblioteca.components.User;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
-import org.junit.After;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import java.util.HashMap;
+import org.junit.*;
 
 public class InputHandlerTest {
-    protected final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-    protected final PrintStream originalOutputStream = System.out;
-    protected final User newUser = new User(
+    protected static final User newUser = new User(
         "12345",
         "Terry",
         "Lu",
         "terrylu@mail.com"
     );
+
+    @BeforeClass
+    public static void resetSession() {
+        InputHandler.USER_SESSIONS = new HashMap<>();
+        InputHandler.SIGNED_IN_AS = newUser;
+        InputHandler.initiateUserSession();
+    }
+
+    protected final ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+    protected final PrintStream originalOutputStream = System.out;
 
     @Before
     public void setOutputStream() {

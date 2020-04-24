@@ -3,8 +3,9 @@ package com.twu.biblioteca.handlers.operation;
 import com.twu.biblioteca.components.Library;
 import com.twu.biblioteca.components.item.RentalItemType;
 import com.twu.biblioteca.handlers.InputHandler;
+import java.security.InvalidParameterException;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.HashMap;
 
 public class WelcomeHandler extends InputHandler {
 
@@ -42,8 +43,12 @@ public class WelcomeHandler extends InputHandler {
         if (index < 1 || index > options.length) {
             this.redirectFromInvalidInput();
         }
+        if (options[index - 1].equals("Log out")) {
+            SIGNED_IN_AS = null;
+            this.backToTop();
+        }
         return new String[] {
-            Integer.toString(index - 1),
+            options[index - 1],
             this.optionReference[index - 1].toString(),
         };
     }
@@ -52,8 +57,14 @@ public class WelcomeHandler extends InputHandler {
      * Override delegate determining method
      */
     @Override
-    protected InputHandler determineDelegate(String input, String... context) {
-        return this.getDelegateHandler()[Integer.parseInt(input) - 1];
+    protected InputHandler determineDelegate(String... input) {
+        if (this.getDelegateHandlerMap() == null) {
+            throw new InvalidParameterException(
+                "A welcome handler must have a delegate handler map."
+            );
+        }
+        HashMap<String, InputHandler> handlerMap = this.getDelegateHandlerMap();
+        return handlerMap.get(input[0]);
     }
 
     /**
@@ -64,10 +75,16 @@ public class WelcomeHandler extends InputHandler {
      */
     @Override
     protected String[] retrieveOptions(String... input) {
-        ArrayList<String> initialOptions = new ArrayList<String>(
-            Arrays.asList("List of books", "List of movies")
-        );
+        ArrayList<String> initialOptions = new ArrayList<String>();
         ArrayList<String> optionReference = new ArrayList<>(initialOptions);
+
+        for (RentalItemType itemType : RentalItemType.values()) {
+            String displayString =
+                "List of " + itemType.toString().toLowerCase() + "s";
+            initialOptions.add(displayString);
+            optionReference.add(displayString);
+        }
+
         for (RentalItemType itemType : RentalItemType.values()) {
             if (
                 InputHandler
@@ -80,11 +97,17 @@ public class WelcomeHandler extends InputHandler {
                 0
             ) {
                 initialOptions.add(
-                    "Return " + itemType.toString().toLowerCase() + " items"
+                    "Return " + itemType.toString().toLowerCase() + "s"
                 );
                 optionReference.add(itemType.toString());
             }
         }
+
+        initialOptions.add("View my profile");
+        optionReference.add("View my profile");
+        initialOptions.add("Log out");
+        optionReference.add("Log out");
+
         this.assignReference(optionReference.toArray());
         return initialOptions.toArray(new String[0]);
     }

@@ -19,7 +19,7 @@ public class UserAuthHandlerTest extends InputHandlerTest {
 
     @Test
     public void testProperty() {
-        Assert.assertEquals(1000, userAuthHandler.getUserPoolSize());
+        Assert.assertEquals(1002, userAuthHandler.getUserPoolSize());
     }
 
     @Test

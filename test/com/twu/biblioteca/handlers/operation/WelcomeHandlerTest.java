@@ -14,7 +14,12 @@ public class WelcomeHandlerTest extends InputHandlerTest {
     public void testRetrieveOptionsMethod() {
         String[] options = welcomeHandler.retrieveOptions();
         Assert.assertArrayEquals(
-            new String[] { "List of books", "List of movies" },
+            new String[] {
+                "List of books",
+                "List of movies",
+                "View my profile",
+                "Log out",
+            },
             options
         );
     }
@@ -22,7 +27,10 @@ public class WelcomeHandlerTest extends InputHandlerTest {
     @Test
     public void testParseInputMethod() {
         String[] result = welcomeHandler.parseInput("1");
-        Assert.assertArrayEquals(new String[] { "0", "List of books" }, result);
+        Assert.assertArrayEquals(
+            new String[] { "List of books", "List of books" },
+            result
+        );
     }
 
     @Test
