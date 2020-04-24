@@ -1,6 +1,7 @@
 package com.twu.biblioteca.handlers;
 
 import com.twu.biblioteca.components.Library;
+import com.twu.biblioteca.components.User;
 
 import java.util.HashMap;
 import java.util.Scanner;
@@ -15,6 +16,7 @@ public abstract class InputHandler {
     public static final String CHECKOUT_ITEMS_KEY = "CHECKED_OUT";
 
     protected static final HashMap<String, HashMap<String, HashMap<String, Object>>> ITEM_SESSION = new HashMap<>();
+    protected static User SIGNED_IN_AS = null;
     protected static final Scanner SCANNER = new Scanner(System.in);
 
     static {
@@ -56,18 +58,33 @@ public abstract class InputHandler {
      * Public method to parse input to the specific input handler class
      */
     public void run(String... previousInput) {
-        // Retrieve and display options
-        this.printHeading();
-        String[] options = retrieveOptions(previousInput);
-        System.out.print("\n" + InputHandler.composeOptionString(this.optionWithIndex, options));
-        this.printFooter();
-
-        InputHandler.printFallbackOption(); // Print fallback options
+        this.displayOptions(previousInput);
 
         // Parse and handling user input; delegate input to child handler or process with parent parsing method
         String userInput = SCANNER.nextLine();
         System.out.println();
 
+        this.handleUserInput(userInput, previousInput);
+    }
+
+    /**
+     * Generic method to display options with header and footer
+     */
+    protected void displayOptions(String... previousInput) {
+        // Retrieve and display options
+        this.printHeading();
+        String[] options = retrieveOptions(previousInput);
+        System.out.print("\n" + InputHandler.composeOptionString(this.optionWithIndex, options));
+        this.printFooter();
+        InputHandler.printFallbackOption(); // Print fallback options
+    }
+
+    /**
+     * Generic method to handle user input
+     * @param userInput User input read from scanner
+     * @param previousInput Previous contextual input
+     */
+    protected void handleUserInput(String userInput, String... previousInput) {
         if (userInput.equals(EXIT_FLAG)) {
             System.exit(0);
         }
@@ -75,13 +92,22 @@ public abstract class InputHandler {
             if (this.previousHandler == null) System.exit(0);
             this.previousHandler.run();
         } else {
-            String[] parseResult = this.parseInput(userInput, previousInput);
-            if (this.delegateHandler != null) {
-                InputHandler handler = this.determineDelegate(userInput, previousInput);
-                handler.run(parseResult);
-            } else {
-                System.exit(0);
-            }
+            this.delegateNextHandler(userInput, previousInput);
+        }
+    }
+
+    /**
+     * Generic method to delegate input to next handler
+     * @param userInput User input read from scanner
+     * @param previousInput Previous contextual input
+     */
+    protected void delegateNextHandler(String userInput, String... previousInput) {
+        String[] parseResult = this.parseInput(userInput, previousInput);
+        if (this.delegateHandler != null) {
+            InputHandler handler = this.determineDelegate(userInput, previousInput);
+            handler.run(parseResult);
+        } else {
+            System.exit(0);
         }
     }
 
